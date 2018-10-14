@@ -1,0 +1,223 @@
+extends ../_docs-template
+
+block vars
+  - var activeLink = 'react';
+  - var title = 'Navbar React Component | Framework7 React Documentation';
+
+block content
+
+  .docs-nav
+    include ../_docs-menu-react
+  .docs-content
+    +improveDocsLink
+    h1 Navbar React Component
+    ul.docs-index
+    p Navbar is a fixed (with Fixed and Through layout types) area at the top of a screen that contains Page title and navigation elements.
+    p Navbar React component represents <a href="../docs/navbar.html">Navbar</a> component.
+    h2 Navbar Components
+    p There are following components included:
+    ul
+      li <code><b>Navbar</b></code> / <code><b>F7Navbar</b></code>
+      li <code><b>NavLeft</b></code> / <code><b>F7NavLeft</b></code>
+      li <code><b>NavRight</b></code> / <code><b>F7NavRight</b></code>
+      li <code><b>NavTitle</b></code> / <code><b>F7NavTitle</b></code>
+    h2 Navbar Properties
+    table.params-table
+      thead
+        tr
+          th Prop
+          th Type
+          th Default
+          th Description
+      tbody
+        tr
+          th(colspan="4") &lt;Navbar&gt; properties
+        tr
+          td inner
+          td boolean
+          td true
+          td When enabled (by default), it will put all the content within internal `navbar-inner` element. Disable it only in case you want to put totally custom layout inside
+        tr
+          td title
+          td string
+          td
+          td Navbar title
+        tr
+          td subtitle
+          td string
+          td
+          td Navbar sub title
+        tr
+          td backLink
+          td boolean<br>string
+          td
+          td Adds back-link with text (if <code>string</code> value is specified)
+        tr
+          td backLinkUrl
+          td string
+          td
+          td Custom back link URL
+        tr
+          td sliding
+          td boolean
+          td true
+          td Enables "sliding" effect for nav elements
+        tr
+          td noShadow
+          td boolean
+          td false
+          td Disable shadow rendering for Material theme
+        tr
+          td noHairline
+          td boolean
+          td false
+          td Disable navbar bottom thin border (hairline) for iOS theme
+        tr
+          td hidden
+          td boolean
+          td false
+          td Makes navbar hidden
+        tr
+          td innerClass
+          td string
+          td
+          td Adds additional class to <code>navbar-inner</code> element
+        tr
+          th(colspan="4") &lt;NavLeft&gt; properties
+        tr
+          td backLink
+          td boolean<br>string
+          td
+          td Adds back-link with text (if string value is specified)
+        tr
+          td backLinkUrl
+          td string
+          td
+          td Custom back link URL
+        tr
+          td sliding
+          td boolean
+          td
+          td Enables "sliding" effect. By default inhertis <code>sliding</code> prop of parent <code>Navbar</code>
+        tr
+          th(colspan="4") &lt;NavTitle&gt; properties
+        tr
+          td title
+          td string
+          td
+          td Specifies element inner title text (affects if there is no child elements)
+        tr
+          td subtitle
+          td string
+          td
+          td Sub title text
+        tr
+          td sliding
+          td boolean
+          td
+          td Enables "sliding" effect. By default inhertis <code>sliding</code> prop of parent <code>Navbar</code>
+        tr
+          th(colspan="4") &lt;NavRight&gt; properties
+        tr
+          td sliding
+          td boolean
+          td
+          td Enables "sliding" effect. By default inhertis <code>sliding</code> prop of parent <code>Navbar</code>
+    h2 Navbar Methods
+    table.methods-table
+      tr
+        th(colspan="2") &lt;Navbar&gt; methods
+      tr
+        td .hide(<span>animate</span>)
+        td Hide navbar
+      tr
+        td .show(<span>animate</span>)
+        td Show navbar
+      tr
+        td .size()
+        td Size navbar
+
+    h2 Navbar Events
+    table.events-table
+      thead
+        tr
+          th Event
+          th Description
+      tbody
+        tr
+          th(colspan="2") &lt;Navbar&gt; events
+        tr
+          td backClick<br>clickBack
+          td Event will be triggered after click on navbar back link
+        tr
+          th(colspan="2") &lt;NavLeft&gt; events
+        tr
+          td backClick<br>clickBack
+          td Event will be triggered after click on navbar back link
+
+    h2 Navbar Slots
+    p Navbar React component (<code>&lt;Navbar&gt;</code>) has additional slots for custom elements:
+    ul
+      li <code><b>default</b></code> - element will be inserted as a child of <code>&lt;div class="navbar-inner"&gt;</code> element
+      li <code><b>before-inner</b></code> - element will be inserted right before <code>&lt;div class="navbar-inner"&gt;</code> element
+      li <code><b>after-inner</b></code> - element will be inserted right after <code>&lt;div class="navbar-inner"&gt;</code> element
+    :code(lang="jsx")
+          <Navbar title="My App">
+            <div slot="before-inner">Before Inner</div>
+            <div slot="after-inner">After Inner</div>
+            <div>Default slot</div>
+          </Navbar>
+
+          {/* Renders to: */}
+
+          <div class="navbar">
+            <div>Before Inner</div>
+            <div class="navbar-inner">
+              <div class="title">My App</div>
+              <div>Default slot</div>
+            </div>
+            <div>After Inner</div>
+          </div>
+
+    h2 Examples
+    h4 Minimal layout
+    :code(lang="jsx")
+          <Navbar title="My App"></Navbar>
+
+    h4 Minimal layout with back link
+    :code(lang="jsx")
+          <Navbar title="My App" backLink="Back"></Navbar>
+
+    h4 Without "sliding" transition effect (affects iOS theme only)
+    :code(lang="jsx")
+          <Navbar title="My App" backLink="Back" sliding="{false}"></Navbar>
+
+    h4 With additional right link to open right panel
+    :code(lang="jsx")
+          <Navbar title="My App" backLink="Back">
+            <NavRight>
+              <Link icon="icon-bars" panelOpen="right"></Link>
+            </NavRight>
+          </Navbar>
+
+    h4 All three parts
+    :code(lang="jsx")
+          <Navbar>
+            <NavLeft backLink="Back"></NavLeft>
+            <NavTitle>My App</NavTitle>
+            <NavRight>
+              <Link icon="icon-bars" panelOpen="right"></Link>
+            </NavRight>
+          </Navbar>
+
+    h4 Full custom layout
+    :code(lang="jsx")
+          <Navbar>
+            <NavLeft>
+              <Link>Left Link</Link>
+            </NavLeft>
+            <NavTitle>My App</NavTitle>
+            <NavRight>
+              <Link>Right Link</Link>
+            </NavRight>
+          </Navbar>

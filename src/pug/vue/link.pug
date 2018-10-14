@@ -1,0 +1,169 @@
+extends ../_docs-template
+
+block vars
+  - var activeLink = 'vue';
+  - var title = 'Link Vue Component | Framework7 Vue Documentation';
+
+block content
+
+  .docs-nav
+    include ../_docs-menu-vue
+  .docs-content
+    +improveDocsLink
+    h1 Link Vue Component
+    ul.docs-index
+    p Link is main component to create links for navigation, custom actions, switching tabs, open/close panels, etc.
+
+    h2 Link Components
+    p There are following components included:
+    ul
+      li <code><b>f7-link</b></code>
+
+    h2 Link Properties
+    table.params-table
+      thead
+        tr
+          th Prop
+          th Type
+          th Default
+          th Description
+      tbody
+        tr
+          th(colspan="4") &lt;f7-link&gt; properties
+        tr
+          td no-link-class
+          td boolean
+          td
+          td Removes "link" class
+        tr
+          td tab-link
+          td string<br>boolean
+          td
+          td Enables tab link and specify CSS selector of the target tab (if specified as a string)
+        tr
+          td tab-link-active
+          td boolean
+          td
+          td Makes this tab link active
+        tr
+          td text
+          td string
+          td
+          td Link text
+        tr
+          td no-fast-click
+          td boolean
+          td
+          td Disables fast click
+        tr
+          td badge
+          td string<br>number
+          td
+          td Badge count
+        tr
+          td badge-color
+          td string
+          td
+          td Badge color. One of the <a href="../docs/color-themes.html">default colors</a>
+        tr
+          td icon-only
+          td boolean
+          td
+          td Enable when used in navbar/toolbar with icon only inside
+        tr
+          td tooltip
+          td string
+          td
+          td Link <a href="../docs/tooltip.html">tooltip</a> text to show on link hover/press
+        tr
+          th(colspan="4") &lt;f7-link&gt; Smart Select related properties
+        tr
+          td smart-select
+          td boolean
+          td false
+          td Enables Smart Select behavior
+        tr
+          td smart-select-params
+          td object
+          td
+          td Object with <a href="../docs/smart-select.html#smart-select-parameters">Smart Select Parameters</a>
+        tr
+          th(colspan="4") &lt;f7-link&gt; icon related properties
+        +vueLinkIconProps
+        tr
+          td icon-badge
+          td string<br>number
+          td
+          td Adds badge to the icon (intended to be used in Tabbar's icons)
+        tr
+          th(colspan="4") &lt;f7-link&gt; navigation/router related properties
+        +vueLinkRouterProps
+        tr
+          th(colspan="4") &lt;f7-link&gt; action related properties
+        +vueLinkActionsProps
+
+    h2 Link Events
+    table.events-table
+      thead
+        tr
+          th Event
+          th Description
+      tbody
+        tr
+          th(colspan="2") &lt;f7-link&gt; events
+        tr
+          td click
+          td Event will be triggered after click on a link
+
+    h2 Examples
+    h4 Navigation Link
+    :code(lang="html")
+          <f7-link href="/about/">About</f7-link>
+
+    h4 Back Navigation Link
+    :code(lang="html")
+          <f7-link back>Back</f7-link>
+
+    h4 With Router Parameters
+    :code(lang="html")
+          <f7-link href="/about/" :animate="false" :ignore-cache="true">About</f7-link>
+
+    h4 External Link
+    :code(lang="html")
+          <f7-link href="http://google.com" external>Google</f7-link>
+
+    h4 Tab Link
+    :code(lang="html")
+          <!-- Tabs -->
+          <f7-tabs>
+            <f7-tab id="tab-1" tab-active>Tab 1</f7-tab>
+            <f7-tab id="tab-1">Tab 2</f7-tab>
+          </f7-tabs>
+          <!-- Switch Between Tabs -->
+          <f7-link tab-link="#tab-1" tab-link-active>Show Tab 1</f7-link>
+          <f7-link tab-link="#tab-2">Show Tab 2</f7-link>
+
+    h4 Routable Tabs
+    :code(lang="html")
+          <!-- Tabs -->
+          <f7-tabs>
+            <f7-tab id="tab-1"></f7-tab>
+            <f7-tab id="tab-2"></f7-tab>
+          </f7-tabs>
+          <!-- Switch Between Tabs -->
+          <f7-link tab-link route-tab-id="tab-1" href="/tabs/">Show Tab 1</f7-link>
+          <f7-link tab-link route-tab-id="tab-2" href="/tabs/tab-2/">Show Tab 2</f7-link>
+
+    h4 Open And Close Panel
+    :code(lang="html")
+          <f7-link panel-open="left">Open Left Panel</f7-link>
+          <f7-link panel-close>Close Panel</f7-link>
+
+    h4 Open and Close Popup
+    :code(lang="html")
+          <f7-link popup-open="#my-popup">Open Popup</f7-link>
+          <f7-link popup-close="#my-popup">Close Popup</f7-link>
+
+    h4 With Icon & Color
+    :code(lang="html")
+          <f7-link icon-f7="home" text="Home" color="red"></f7-link>

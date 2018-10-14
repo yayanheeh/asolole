@@ -1,0 +1,564 @@
+extends ../_docs-template
+
+block vars
+  - var title = 'Router Component | Framework7 Documentation';
+
+block content
+  .docs-nav
+    include ../_docs-menu
+  .docs-content
+    +improveDocsLink
+    h1 Router Component
+    ul.docs-index
+    p Router Component is a special type of content that can be loaded by Router when we specify route content using <code>component</code> or <code>componentUrl</code> properties.
+    p It should help to better structure our apps, keep things in appropriate place, and make many things quicker and in a more clear and comfortable way.
+    <h2>Component Structure</h2>
+    p If you know what is Vue component, then it will be much easier to understand as it looks pretty similar. Router Component is basically an object with the following properties (all properties are optional):
+    table.params-table
+      thead
+        tr
+          th Property
+          th Type
+          th Description
+      tbody
+        tr
+          td template
+          td string
+          td Template7 template string. Will be compiled as Template7 template
+        tr
+          td render
+          td function
+          td Render function to render component. Must return full html string or HTMLElement
+        tr
+          td data
+          td function
+          td Component data, function must return component context data
+        tr
+          td style
+          td string
+          td Component CSS styles. Styles will be added to the document after component will be mounted (added to DOM), and removed after component will be destroyed (removed from the DOM)
+        tr
+          td methods
+          td object
+          td Object with additional component methods which extend component context
+        tr
+          td on
+          td object
+          td Object with page events handlers
+        tr
+          th(colspan="3") Lifecycle Hooks
+        tr
+          td beforeCreate
+          td function
+          td Called synchronously immediately after the component has been initialized, before data and event/watcher setup.
+        tr
+          td created
+          td function
+          td Called synchronously after the component is created, context data and methods are available and component element <code>$el</code> is also created and available
+        tr
+          td beforeMount
+          td function
+          td Called right before component will be added to DOM
+        tr
+          td mounted
+          td function
+          td Called right after component was be added to DOM
+        tr
+          td updated
+          td function
+          td Called right after component VDOM has been patched
+        tr
+          td beforeDestroy
+          td function
+          td Called right before component will be destoyed
+        tr
+          td destroyed
+          td function
+          td Called when component destroyed
+    .important-note
+      p All lifecycle hooks and methods automatically have their <code>this</code> context bound to the component context, so that you can access component data and methods. This means <b>you should not use an arrow function to define a lifecycle method</b> (e.g. <code>created: () => this.doSomething()</code>). The reason is arrow functions bind the parent context, so <code>this</code> will not be the component instance as you expect and <code>this.doSomething</code> will be undefined.
+    p So the example route with page component may look like:
+    :code(lang="js")
+          routes = [
+            // ...
+            {
+              path: '/some-page/',
+              // Component Object
+              component: {
+                template: `
+                  <div class="page">
+                    <div class="navbar">
+                      <div class="navbar-inner">
+                        <div class="title">{{title}}</div>
+                      </div>
+                    </div>
+                    <div class="page-content">
+                      <a @click="openAlert" class="red-link">Open Alert</a>
+                      <div class="list simple-list">
+                        <ul>
+                          {{#each names}}
+                            <li>{{this}}</li>
+                          {{/each}}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                style: `
+                  .red-link {
+                    color: red;
+                  }
+                `,
+                data: function () {
+                  return {
+                    title: 'Component Page',
+                    names: ['John', 'Vladimir', 'Timo'],
+                  }
+                },
+                methods: {
+                  openAlert: function () {
+                    var self = this;
+                    self.$app.dialog.alert('Hello world!');
+                  },
+                },
+                on: {
+                  pageInit: function (e, page) {
+                    // do something on page init
+                  },
+                  pageAfterOut: function (e, page) {
+                    // page has left the view
+                  },
+                }
+              },
+            },
+            // ...
+          ]
+    h2 Component Context
+    p As we said above, all component methods and Template7 compiler are executed in the context of the component.
+    p Component context is the object you have returned in component's <code>data</code> and methods from specified <code>methods</code> object, but also extended with the following useful properties:
+    table.params-table
+      thead
+        th Property
+        th Type
+        th Desctiption
+      tbody
+        tr
+          td $el
+          td object
+          td Dom7 instance with component HTML element
+            :code(lang="js")
+                  this.$el.find('p').addClass('red')
+        tr
+          td $<br>$$<br>$dom7
+          td function
+          td <a href="dom7.html">Dom7</a> library:
+            :code(lang="js")
+                  this.$$('p').text('hello world')
+        tr
+          td $app
+          td object
+          td Framework7 app instance
+            :code(lang="js")
+                  this.$app.dialog.alert('Hello world!')
+        tr
+          td $root
+          td object
+          td Root data and methods you have specified in <code>data</code> and <code>methods</code> properties on app init
+            :code(lang="js")
+                  var app = new Framework7({
+                    // root data
+                    data: function () {
+                      return {
+                        username: 'johndoe'
+                      }
+                    },
+                    // root methods
+                    methods: {
+                      helloWorld: function () {
+                        app.dialog.alert('Hello world!');
+                      }
+                    }
+                  });
+
+                  // then in component:
+                  console.log(this.$root.username); // -> 'johndoe';
+
+                  this.$root.helloWorld(); // -> call alert
+        tr
+          td $route
+          td object
+          td Current route. Contains object with route <code>query</code>, <code>hash</code>, <code>params</code>, <code>path</code> and <code>url</code>
+        tr
+          td $router
+          td Router instance
+          td Related router instance
+            :code(lang="js")
+                  this.$router.back(); //navigate back
+        tr
+          td $theme
+          td object
+          td Object with <code>md</code> and <code>ios</code> boolean properties which indicating current theme. For example:
+            :code(lang="js")
+                  if (this.$theme.ios) { /* do something when iOS theme is active */ }
+                  if (this.$theme.md) { /* do something when MD theme is active */ }
+        tr
+          td $setState()
+          td function
+          td
+            p Component method where you pass #[code mergeState] object that will be merged with current component state. It is the method that tells to component that its state has been changed and it must be rerendered. It launches the process of VDOM comparison and patching of necessary elements and attributes in real DOM.
+            p Such mechanism is similar to React's approach and its #[setState()] method. It allows to control rendering and avoid unnecessary renders.
+            p.important-note Note, that direct assignment to component state won't trigger layout update. If we use #[code this.foo = 'bar'] it will not be updated. Use <code>$setState()</code> whenever you need to update component layout!
+    h2 Component Page Events
+    p Component page events handlers can be passed in <code>on</code> component property. They are usual DOM <a href="page.html#page-events">Page Events</a>. Because they are DOM events, they accept <code>event</code> as first agrument, and <a href="page.html#page-data">Page Data</a> as second argument. There only difference with usual DOM events is that their context (<code>this</code>) bound to component context and event handler name must be specified in camelCase format (#[code page:init] -> #[code pageInit]):
+    :code(lang="js")
+          ...
+          data: function () {
+            return {
+              username: 'johndoe',
+            };
+          },
+          on: {
+            pageMounted: function (e, page) {
+              console.log('page mounted');
+            },
+            pageInit: function (e, page) {
+              console.log(this.username); // -> 'johndoe'
+            },
+            pageBeforeIn: function (e, page) {
+              console.log('page before in');
+            },
+            pageAfterIn: function (e, page) {
+              console.log('page after in');
+            },
+            pageBeforeOut: function (e, page) {
+              console.log('page before out');
+            },
+            pageAfterOut: function (e, page) {
+              console.log('page after out');
+            },
+            pageBeforeRemove: function (e, page) {
+              console.log('page before remove');
+            },
+          }
+    h2 DOM Events Handling
+    p Note that additional <code>@</code> attribute in component template. It is a shorthand method to assign event listener to the specified element. Specified event handler will be searched in component <code>methods</code>.
+    p Such event handlers are processed only on initial rendering, or for elements patched with VDOM. <b>If you add such element to DOM manually it won't work!</b>
+    :code(lang="js")
+          {
+            // ...
+            methods: {
+              onClick: function() {
+                // ...
+              }
+            },
+            on: {
+              pageInit: function (page) {
+                // this won't work
+                page.$el.append('<a @click="onClick">Link</a>');
+              }
+            }
+          }
+    h2 Single File Component
+    p It is not very comfortable to specify all component routes under same routes array, especially if we have a lot of such routes. This is why we can use <code>componentUrl</code> instead and out component into single file:
+    :code(lang="js")
+          routes = [
+            ...
+            {
+              path: '/some-page/',
+              componentUrl: './some-page.html',
+            },
+            ..
+          ];
+    p And in <code>some-page.html</code>:
+    :code(lang="html")
+          <!-- component template -->
+          <template>
+            <div class="page">
+              <div class="navbar">
+                <div class="navbar-inner">
+                  <div class="title">{{title}}</div>
+                </div>
+              </div>
+              <div class="page-content">
+                <a @click="openAlert">Open Alert</a>
+                <div class="list simple-list">
+                  <ul>
+                    {{#each names}}
+                      <li>{{this}}</li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </template>
+          <!-- component styles -->
+          <style>
+            .red-link {
+              color: red;
+            }
+          </style>
+          <!-- rest of component data and methods -->
+          <script>
+            // script must return component object
+            return {
+              data: function () {
+                return {
+                  title: 'Component Page',
+                  names: ['John', 'Vladimir', 'Timo'],
+                }
+              },
+              methods: {
+                openAlert: function () {
+                  var self = this.$app.dialog.alert('Hello world!');
+                },
+              },
+              on: {
+                pageInit: function () {
+                  // do something on page init
+                },
+                pageAfterOut: function () {
+                  // page has left the view
+                },
+              }
+            }
+          </script>
+    p Well, now it is much cleaner. The <code>&lt;template&gt;</code> and <code>&lt;style&gt;</code> tags will be automatically converted to the same properties of exported component.
+    p You may think that it is not valid to have a direct <code>return</code> statement in script, but it is ok because parser puts the content of the script tag into function body.
+    h3 ES Template Literals
+    .important-note
+      p
+        b The feature available from Framework7 version 3.1.0.
+    p When we use single file component, the everything what is under <code>&lt;template&gt;</code> tag is compiled as Template7 template. In some situations it may bring more complexity, if you need to do a lot of complex checks and modifications right in the template. With Template7 you may need to register a bunch of helpers.
+
+    p So single file component template can be treated as native JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank">Template literal</a>.
+
+    p Template literals are string literals allowing embedded expressions. You can use multi-line strings and string interpolation features with them. They were called "template strings" in prior editions of the ES2015 specification.
+
+    :code(lang="js")
+          var a = 5;
+          var b = 10;
+          console.log(`Fifteen is ${a + b} and not ${2 * a + b}.`);
+
+    p To enable your component template being treated as template literal we need to add <code>es</code> attribute to <code>&lt;template&gt;</code> tag. The template from previous example will look like:
+    :code(lang="html")
+          <template es>
+            <div class="page">
+              <div class="navbar">
+                <div class="navbar-inner">
+                  <div class="title">${this.title}</div>
+                </div>
+              </div>
+              <div class="page-content">
+                <a @click="openAlert">Open Alert</a>
+                <div class="list simple-list">
+                  <ul>
+                    ${this.names.map((name) => `
+                      <li>${name}</li>
+                    `).join('')}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </template>
+
+    h3 Scoped Styles
+    p In case you want to scope component styles in single file component to this component only, you may add <code><b>scoped</b></code> attribute to component <code>&lt;style&gt;</code> tag:
+    :code(lang="html")
+          <template>
+            <!-- component template -->
+          </template>
+
+          <!-- style has additional "scoped" attribute -->
+          <style scoped>
+            p {
+              color: red;
+            }
+            a {
+              text-decoration: none;
+            }
+          </style>
+
+          <script>
+            return {
+              ...
+            }
+          </script>
+    p When scoped style added component element will have additional <code>data-scope="[unique_id]"</code> where [unique_id] is the unique timestamp. And all styles will be refactored to have this unique scope id, for example:
+    :code(lang="css")
+          [data-scope="1515740589328"] p {
+            color: red;
+          }
+          [data-scope="1515740589328"] a {
+            text-decoration: none;
+          }
+    p In case you need to use more complex selector with including component parent reference, then you may use <code><b>{{this}}</b></code> keword to reference the component:
+    :code(lang="html")
+          <template>
+            <!-- component template -->
+          </template>
+
+          <!-- style has additional "scoped" attribute -->
+          <style scoped>
+            /* all paragraphs in this component will be red under iOS theme */
+            html.ios {{this}} p {
+              color: red;
+            }
+            /* all paragraphs in this component will be green under MD theme */
+            html.md {{this}} p {
+              color: green;
+            }
+          </style>
+
+          <script>
+            return {
+              ...
+            }
+          </script>
+    h2 Virtual DOM
+    .important-note
+      p
+        b Virtual DOM and all VDOM related features available from Framework7 version 3.1.0.
+    p The virtual DOM (VDOM) is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM. It allows us to express our application's view as a function of its state.
+    p VDOM library called #[a(href="https://github.com/snabbdom/snabbdom" target="_blank") Snabbdom] because it is extremely lightweight, fast and fits great for Framework7 environment.
+    p So how does Framework7 router component VDOM rendering works? Component template is converted to VDOM instead of directly inserting to DOM. Later, when component state changes, it creates new VDOM and compares it with previous VDOM. And based on that diff it patches real DOM by changing only elements and attributes that need to be changed. And all this happens automatically!
+    p Let's look at that user profile component example that will auto update layout when we request user data:
+
+    :code(lang="html")
+        <template>
+          <div class="page">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="title">Profile</div>
+              </div>
+            </div>
+            <div class="page-content">
+              {{#if user}}
+              <!-- Show user list when it is loaded -->
+              <div class="list simple-list">
+                <ul>
+                  <li>First Name: {{user.firstName}}</li>
+                  <li>Last Name: {{user.lastName}}</li>
+                  <li>Age: {{user.age}}</li>
+                </ul>
+              </div>
+              {{else}}
+              <!-- Otherwise show preloader -->
+              <div class="block block-strong text-align-center">
+                <div class="preloader"></div>
+              </div>
+              {{/if}}
+            </div>
+          </div>
+        </template>
+        <script>
+          return {
+            data: function () {
+              return {
+                // empty initial user data
+                user: null,
+              }
+            },
+            on: {
+              pageInit: function () {
+                var self = this;
+                var app = self.$app;
+                // request user data on page init
+                app.request.get('http://api.website.com/get-user-profile', (user) => {
+                  // update component state with new state
+                  self.$setState({
+                    user: user,
+                  });
+                });
+              },
+            },
+          };
+        </script>
+    .important-note
+      p Note, that direct assignment to component state won't trigger layout update. And if we in previous example used <code>this.user = user</code> it wouldn't be updated. Use <code>$setState</code> whenever you need to update component layout!
+    h3 Keys in Lists & Auto-Init Components
+    p When VDOM is updating a list of elements, by default it uses an "in-place patch" strategy. If the order of the data items has changed, instead of moving the DOM elements to match the order of the items, it will patch each element in-place and make sure it reflects what should be rendered at that particular index.
+
+    p This default mode is efficient, but only suitable <b>when your render output does not rely on child component state or temporary DOM state (e.g. form input values)</b>.
+
+    p To give VDOM a hint so that it can track each node's identity, and thus reuse and reorder existing elements, you need to provide a unique <code>key</code> attribute for each item.
+
+    p When rendering lists, an ideal value for <code>key</code> would be the unique id of each item:
+
+    :code(lang="html")
+          <template>
+            ...
+            <ul>
+              {{#each items}}
+              <li key="{{this.id}}">...</li>
+              {{/each}}
+            </ul>
+            ...
+          </template>
+          <script>
+            return {
+              data: function () {
+                return {
+                  items: [
+                    {
+                      id: 1,
+                      title: 'Item A'
+                    },
+                    {
+                      id: 2,
+                      title: 'Item B'
+                    },
+                  ]
+                }
+              }
+            }
+          </script>
+
+    p Same with auto-initialized components like <a href="./range-slider.html">Range Slider</a>, <a href="./gauge.html">Gauge</a> and others that should be automatically initialized (if they have <code>range-slider-init</code>, <code>gauge-init</code>) when they added to DOM, and automatically destroyed when they removed from DOM. So such elements must be also indentified with unique keys.
+
+    :code(lang="html")
+          <template>
+            <div class="page">
+              ...
+              <div class="page-content">
+                {{#if gaugeVisible}}
+                <!-- must have unique key -->
+                <div key="gauge" class="gauge gauge-init" data-type="circle"
+                  data-value="0.60"
+                  data-value-text="60%"
+                  data-value-text-color="#ff9800"
+                  data-border-color="#ff9800"
+                ></div>
+                {{/if}}
+                ...
+                <a href="#" class="button" @click="showGauge">Show Gauge</a>
+              </div>
+            </div>
+          </template>
+          <script>
+            return {
+              data: function () {
+                return {
+                  gaugeVisible: false,
+                }
+              },
+              methods: {
+                showGauge: function () {
+                  this.$setState({
+                    gaugeVisible: true
+                  })
+                },
+              }
+            }
+          </script>
+    .important-note
+      ul
+        li Note that <code>key</code> attribute must be unique accross single component.
+        li If <code>key</code> attribute was not specified and element has an <code>id</code> attribute, then <code>id</code> attribute will be used as virtual node unique key.
+
+
+
+
+
+
+
+

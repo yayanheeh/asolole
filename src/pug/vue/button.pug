@@ -1,0 +1,350 @@
+extends ../_docs-template
+
+block vars
+  - var activeLink = 'vue';
+  - var title = 'Button Vue Component | Framework7 Vue Documentation';
+
+block content
+  include ../_docs-demo-device
+
+  .docs-nav
+    include ../_docs-menu-vue
+  .docs-content
+    +improveDocsLink
+    h1 Button Vue Component
+    ul.docs-index
+    p Button Vue component represents Framework7's <a href="../docs/button.html">Button</a> elements.
+
+    h2 Button Components
+    p There are following components included:
+    ul
+      li <code><b>f7-button</b></code> - single button
+      li <code><b>f7-segmented</b></code> - segmented wrapper for buttons
+
+    h2 Button Properties
+    p Button component has almost the same properties as the <a href="link.html">Link</a> component but with few additional button-specific properties:
+    table.params-table
+      thead
+        tr
+          th Prop
+          th Type
+          th Default
+          th Description
+      tbody
+        tr
+          th(colspan="4") &lt;f7-segmented&gt; properties
+        tr
+          td raised
+          td boolean
+          td false
+          td Makes segmented raised. Affects MD theme only
+        tr
+          td round
+          td boolean
+          td false
+          td Makes segmented round
+        tr
+          td tag
+          td string
+          td div
+          td Tag used to render Segmented element
+        tr
+          th(colspan="4") &lt;f7-button&gt; properties
+        tr
+          td tab-link
+          td string<br>boolean
+          td
+          td Enables tab link and specify CSS selector of the target tab (if specified as a string)
+        tr
+          td tab-link-active
+          td boolean
+          td false
+          td Makes this tab link active
+        tr
+          td active
+          td boolean
+          td false
+          td Makes this button active state when used in Segmented. Must be used instead of <code>tab-link-active</code>
+        tr
+          td text
+          td string
+          td
+          td Button text label
+        tr
+          td no-fast-click
+          td boolean
+          td
+          td Disables fast click
+        tr
+          td tooltip
+          td string
+          td
+          td Button <a href="../docs/tooltip.html">tooltip</a> text to show on button hover/press
+        tr
+          td round
+          td boolean
+          td false
+          td Makes button round
+        tr
+          td round-ios
+          td boolean
+          td false
+          td Makes button round for iOS theme only
+        tr
+          td round-md
+          td boolean
+          td false
+          td Makes button round for MD theme only
+        tr
+          td big
+          td boolean
+          td false
+          td Makes big button
+        tr
+          td big-ios
+          td boolean
+          td false
+          td Makes big button for iOS theme only
+        tr
+          td big-md
+          td boolean
+          td false
+          td Makes big button for MD theme only
+        tr
+          td small
+          td boolean
+          td false
+          td Makes small button
+        tr
+          td small-ios
+          td boolean
+          td false
+          td Makes small button for iOS theme only
+        tr
+          td small-md
+          td boolean
+          td false
+          td Makes small button for MD theme only
+        tr
+          td fill
+          td boolean
+          td false
+          td Makes button filled color
+        tr
+          td fill-ios
+          td boolean
+          td false
+          td Makes button filled color for iOS theme only
+        tr
+          td fill-md
+          td boolean
+          td false
+          td Makes button filled color for MD theme only
+        tr
+          td raised
+          td boolean
+          td false
+          td Makes button raised. Affects MD theme only
+        tr
+          td outline
+          td boolean
+          td false
+          td Makes button outline. Affects MD theme only
+        tr
+          th(colspan="4") &lt;f7-button&gt; icon related properties
+        +vueLinkIconProps
+        tr
+          th(colspan="4") &lt;f7-button&gt; navigation/router related properties
+        +vueLinkRouterProps
+        tr
+          th(colspan="4") &lt;f7-button&gt; action related properties
+        +vueLinkActionsProps
+
+    h2 Button Events
+    table.events-table
+      thead
+        tr
+          th Event
+          th Description
+      tbody
+        tr
+          th(colspan="2") &lt;f7-button&gt; events
+        tr
+          td click
+          td Event will be triggered after click on a button
+
+    .with-device
+      h2(data-device-preview="../docs-demos/vue/button.html") Examples
+      :code(lang="html")
+            <f7-block-title>Usual Buttons</f7-block-title>
+            <f7-block>
+              <f7-row>
+                <f7-col>
+                  <f7-button>Button</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button>Button</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button round>Round</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Fill Buttons</f7-block-title>
+            <f7-block>
+              <f7-row>
+                <f7-col>
+                  <f7-button fill>Button</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button fill>Button</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button fill round>Round</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Outline Buttons (MD-theme only)</f7-block-title>
+            <f7-block>
+              <f7-row>
+                <f7-col>
+                  <f7-button outline>Button</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button outline>Button</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button outline round>Round</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Raised Buttons (MD-theme only)</f7-block-title>
+            <f7-block>
+              <f7-row tag="p">
+                <f7-col tag="span">
+                  <f7-button raised>Button</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button raised fill>Fill</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button raised outline>Outline</f7-button>
+                </f7-col>
+              </f7-row>
+              <f7-row tag="p">
+                <f7-col tag="span">
+                  <f7-button raised round>Round</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button raised fill round>Fill</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button raised outline round>Outline</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Segmented</f7-block-title>
+            <f7-block>
+              <f7-segmented raised tag="p">
+                <f7-button>Button</f7-button>
+                <f7-button>Button</f7-button>
+                <f7-button active>Active</f7-button>
+              </f7-segmented>
+              <f7-segmented raised tag="p">
+                <f7-button outline>Outline</f7-button>
+                <f7-button outline>Outline</f7-button>
+                <f7-button outline active>Active</f7-button>
+              </f7-segmented>
+              <f7-segmented raised round tag="p">
+                <f7-button round>Button</f7-button>
+                <f7-button round>Button</f7-button>
+                <f7-button round active>Active</f7-button>
+              </f7-segmented>
+              <f7-segmented round round tag="p">
+                <f7-button round outline>Outline</f7-button>
+                <f7-button round outline>Outline</f7-button>
+                <f7-button round outline active>Active</f7-button>
+              </f7-segmented>
+            </f7-block>
+
+            <f7-block-title>Big Buttons</f7-block-title>
+            <f7-block>
+              <f7-row tag="p">
+                <f7-col tag="span">
+                  <f7-button big>Button</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button big fill>Fill</f7-button>
+                </f7-col>
+              </f7-row>
+              <f7-row tag="p">
+                <f7-col tag="span">
+                  <f7-button big raised>Raised</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button big raised fill>Raised Fill</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Small Buttons</f7-block-title>
+            <f7-block>
+              <f7-row tag="p">
+                <f7-col tag="span">
+                  <f7-button big small>Button</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button big small outline>Outline</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button big small fill>Fill</f7-button>
+                </f7-col>
+              </f7-row>
+              <f7-row tag="p">
+                <f7-col tag="span">
+                  <f7-button big small round>Button</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button big small outline round>Outline</f7-button>
+                </f7-col>
+                <f7-col tag="span">
+                  <f7-button big small fill round>Fill</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Color Buttons</f7-block-title>
+            <f7-block>
+              <f7-row>
+                <f7-col>
+                  <f7-button color="red">Red</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button color="green">Green</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button color="blue">Blue</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+            <f7-block-title>Color Fill Buttons</f7-block-title>
+            <f7-block>
+              <f7-row>
+                <f7-col>
+                  <f7-button fill color="red">Red</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button fill color="green">Green</f7-button>
+                </f7-col>
+                <f7-col>
+                  <f7-button fill color="blue">Blue</f7-button>
+                </f7-col>
+              </f7-row>
+            </f7-block>
+
+

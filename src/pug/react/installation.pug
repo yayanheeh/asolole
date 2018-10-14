@@ -1,0 +1,64 @@
+extends ../_docs-template
+
+block vars
+  - var activeLink = 'react';
+  - var title = 'Installation | Framework7 React Documentation';
+
+block content
+
+  .docs-nav
+    include ../_docs-menu-react
+  .docs-content
+    +improveDocsLink
+    h1 Installation
+    p It is really easy to build your app with Framework7 and React. To get started we need to install Framework7, React, Framework7-React plugin. You can skip this step and use one of the ready to use <a href="/templates/">starter app templates</a>.
+    h4 1. Install Framework7
+    p First of all we need to <a href="../docs/installation.html">install Framework7</a> library itself.
+    h4 2. Install React
+    p Read about how to install React on the official <a href="https://reactjs.org/docs/getting-started.html" target="_blank">React Installation Guide</a>.
+    h4 3. Install Framework7-React Plugin
+    p Now we need the Framework7-React plugin for React, we can do it with two ways:
+    ul
+      li
+        p
+          b Download From GitHub Repository
+        p We can download required Framework7-React files from <a href="https://github.com/framework7io/framework7/releases">Framework7 GitHub repository</a>.
+      li
+        p
+          b Install From NPM
+        p We can also install Framework7-React from NPM:
+        :code              $ npm install framework7-react
+
+    h2 ES Module
+    .important-note
+      p This feature currently can be used in bundlers like Webpack and Rollup
+    p Framework7-React can also be imported as an ES-next module:
+    :code(lang="js")
+          import Framework7React from 'framework7-react'
+    .important-note
+      p <b>By default it exports only core Framework7-React plugin without any components</b>.
+    p And if you need additional components they must be imported additionally:
+    :code(lang="jsx")
+          // my-page.jsx
+
+          import React from 'react';
+
+          // Import F7 components you need
+          import { Page, Navbar, List, ListItem } from 'framework7-react';
+
+          export default () => (
+            <Page>
+              <Navbar title="My Page" />
+              <List>
+                <ListItem title="Item 1" />
+                <ListItem title="Item 2" />
+              </List>
+            </Page>
+          );
+
+    h2 App HTML Layout
+    p Now when we have downloaded/installed Framework7-React, we can start from creating <a href="app-layout.html">App Layout</a>.
+
+
+
+
